@@ -12,3 +12,7 @@ Main functions:
 5.Waf fuzzer
 6.Url redirect fuzzer
 
+#update 2016.01.15
+1.add hack-http-header api
+2.modify js file
+3.thx the author of hack-http-header:0xjin
