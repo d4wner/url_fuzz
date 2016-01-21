@@ -205,7 +205,7 @@ function SendUrl(Sendtype,url,SendContent){
 	xmlhttp.open(Sendtype,url,true);
     xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     xmlhttp.send(SendContent);
-	alert('Xss_detect has been send...');
+	alert('Vuln_detect has been send...');
 }
 
 function showDetails(reqId) {
@@ -224,9 +224,9 @@ function showDetails(reqId) {
     info += "<\/td><\/tr>";
     info += '<tr class="warning"><td colspan="2"><b>Check Url :  '+headerInfo.request[reqId].url+'<\/b>  <\/td><\/tr>';
 	
-	info +='<tr class="warning"><td colspan="2"><b> <input value="CheckSqli" id="check" type="button">&nbsp;&nbsp;<input value="CheckVulns" id="checkvulns" type="button"><\/b>&nbsp;<=SpecificPara=><input type="text" id="specific_para" name="specific_para" /><\/b><\/td><\/tr>';
+	info +='<tr class="warning"><td colspan="2"><b> <input value="CheckSqli" id="check" type="button">&nbsp;&nbsp;<input value="CheckVulns" id="checkvulns" type="button"><\/b>&nbsp;<=SpecificPara=><input type="text" id="specific_para" name="specific_para" STYLE="WIDTH:300PX;"/><\/b><\/td><\/tr>';
 	
-	info += '<tr class="warning"><td colspan="2"><b>Detect type:  <\/b><input type="radio" id="xss_detect" name="detect_type" value="xss_detect" checked = checked/>xss_detect<\/b>&nbsp;<input type="radio" id="url_redirect" name="detect_type" value="url_redirect" />url_redirect<\/b>&nbsp;<input type="radio" id="file_traversal" name="detect_type" value="file_traversal" />file_traversal<\/b>&nbsp;<input type="radio" id="file_read" name="detect_type" value="file_read" />file_read<\/b>&nbsp;<\/td><\/tr>';
+	info += '<tr class="warning"><td colspan="2"><b>Detect type:  <\/b><input type="radio" id="xss_detect" name="detect_type" value="xss_detect" checked = checked/>xss_detect<\/b>&nbsp;<input type="radio" id="url_redirect" name="detect_type" value="url_redirect" />url_redirect<\/b>&nbsp;<input type="radio" id="file_download" name="detect_type" value="file_download" />file_download<\/b>&nbsp;<input type="radio" id="file_read" name="detect_type" value="file_read" />file_read<\/b>&nbsp;<input type="radio" id="pass_by" name="detect_type" value="pass_by" />pass_by<\/td><\/tr>';
 	info += '<tr class="warning"><td colspan="2"><b>Response Headers<\/b><\/td><\/tr>';
     
     for(i = 0; i < responseHeaderLength; i++){
@@ -283,7 +283,7 @@ function showDetails(reqId) {
 		//alert(123);
 		//alert(specific_para);
 		//alert(detect_type_value);
-		SendUrl('Post','http://127.0.0.1:8776/server.py','url='+encodeURIComponent(headerInfo.request[reqId].url)+'&specific_para='+specific_para+'&detect_type='+detect_type_value);
+		SendUrl('Post','http://127.0.0.1:8776/server.py','url='+encodeURIComponent(headerInfo.request[reqId].url)+'&specific_para='+encodeURIComponent(specific_para)+'&detect_type='+detect_type_value);
 	}
 	
     document.getElementById('check').onclick=function(){

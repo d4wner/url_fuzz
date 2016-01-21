@@ -14,5 +14,12 @@ Main functions:
 
 #update 2016.01.15
 1.add hack-http-header api
-2.modify js file
-3.thx the author of hack-http-header:0xjin
+2.modify hack-http-headers.js
+3.thx the origin author of hack-http-header:0xjin
+
+#update 2016.01.21
+1.correct some bugs
+2.add pass by module
+3.all modules in a file
+4.waf fuzzer will come later
+

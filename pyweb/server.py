@@ -3,6 +3,7 @@ from BaseHTTPServer import HTTPServer
 import cgi
 import urlparse
 import sys
+
 sys.path.append('modules/')
 
 
@@ -32,56 +33,40 @@ class PostHandler(BaseHTTPRequestHandler):
             paras = form[field].value
             self.wfile.write('%s=%s\n' % (field, paras))
             #fields.append(paras)
+
             
             #example
             #I would define default values here.
-            detect_type = "xss_detect"
-            specific_para = "id"
+
+            #detect_type = "xss_detect"
+            specific_para = ""
             
             if field == "detect_type":
                 detect_type = paras
+                print "[+]Get detect_type:"+paras+"\n"  
             elif field == "url":
                 url = paras
-            elif field == "specific_para":
-                specific_para = paras
+                print "[+]Get url:"+paras+"\n"
+            elif field == "specific_para" and paras != None:
+                specific_para = str(paras)
+                print "[+]Get specific_para:"+paras+"\n"
             else:
                 pass            
-            print "[+]Get parameter:"+paras+"\n"        
+                  
         
+        #if specific_para == None:
+        #    specific_para = ""
+        from vuln_detect import fuzzer
         
+        try:
+            #print specific_para
+            fuzzer = fuzzer(url,detect_type,specific_para)
+            log_value = fuzzer.detect()
+        except Exception,e:
+            print e
 
-        #Start to switch...
-        if detect_type == "file_read":
-            from file_read import fuzzer
-        elif detect_type == "xss_detect": 
-            from xss_detect import fuzzer
-            #fuzzer = fuzzer(url)
-            #fuzzer.detect()
-        elif detect_type == "url_redirect":
-            from url_redirect import fuzzer
-        elif detect_type == "file_traversal":
-            from file_traversal import fuzzer
-        #yuequan function
-        elif detect_type == "pass_by":
-            from pass_by import fuzzer
-        #elif detect_type == "":
-        else:
-            return
-        fuzzer = fuzzer(url)
-        log_value = fuzzer.detect()
-        #if resp:
-        #    print "[!]"+detect_type+"Get resp:"+resp+"\n"
-        #    f.writelines(resp+'\n')
-        #print "[+]"+str(log_value)+"\n"
-        if log_value != "Error" and log_value != None:
-            f = open("log.txt","a+")
-            f.writelines("[+]Test url:"+url+'\n')
-            f.writelines("[!]Log value:\n"+log_value)
-            f.close()
-        else:
-            print "[+]Maybe no vulns here!\n"
-            #pass
-        return
+
+        #return
 
 if __name__ == '__main__':
     server = HTTPServer(('localhost', 8776), PostHandler)
