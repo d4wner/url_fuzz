@@ -23,3 +23,6 @@ Main functions:
 3.all modules in a file
 4.waf fuzzer will come later
 
+#update 2016.01.23
+1.add waf detect
+
