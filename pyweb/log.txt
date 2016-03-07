@@ -13,3 +13,9 @@
 [!]Vuln url:http://zone.wooyun.org/content/25061
 [!]Vuln type:pass_by_detect
 [!]Vuln para:None
+[!]Vuln url:http://www.tvsou.com:80/column/index.asp?id=yuQ17S
+[!]Vuln type:xss_detect
+[!]Vuln para:id
+[!]Vuln url:http://www.tvsou.com/column/index.asp?id=yuQ17S
+[!]Vuln type:xss_detect
+[!]Vuln para:id

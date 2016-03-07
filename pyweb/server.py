@@ -50,6 +50,8 @@ class PostHandler(BaseHTTPRequestHandler):
             elif field == "specific_para" and paras != None:
                 specific_para = str(paras)
                 print "[+]Get specific_para:"+paras+"\n"
+            elif field == "cookie":
+                print "[+]Get cookie:"+paras+"\n"
             else:
                 pass            
                   
@@ -62,6 +64,7 @@ class PostHandler(BaseHTTPRequestHandler):
             #print specific_para
             fuzzer = fuzzer(url,detect_type,specific_para)
             log_value = fuzzer.detect()
+            print "======================================="
         except Exception,e:
             print e
 
@@ -70,5 +73,16 @@ class PostHandler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     server = HTTPServer(('localhost', 8776), PostHandler)
-    print 'Starting server, use <Ctrl-C> to stop'
+    print """
+  ___ ___          ______            _______
+ |   Y   |        |   _  \          |   _   |
+ |.  |   |        |.  |   \         |.  1   |
+ |.  |   | ______ |.  |    \ ______ |.  ____|
+ |:  1   ||______||:  1    /|______||:  |
+  \:.. ./         |::.. . /         |::.|
+   `---'          `------'          `---'
+   [+.........Vuln_Detect_Proxy.........+]
+   [+...................................+]
+"""
+    print 'Starting vuln_detect server, use <Ctrl-C> to stop'
     server.serve_forever()

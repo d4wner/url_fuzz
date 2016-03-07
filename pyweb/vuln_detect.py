@@ -6,12 +6,14 @@ import re
 
 
 class fuzzer:
-    def __init__(self,url,detect_type,keyword=""):
+    def __init__(self,url,detect_type,keyword="",cookie=""):
         self.url = url
         self.detect_type = detect_type
         self.keyword = keyword
+        self.cookie = cookie
     def detect(self):
         #预检测是否存在WAF，如果存在，不进行下一步，直接警告。
+
         if self.waf_detect():
             return
 
@@ -50,8 +52,19 @@ class fuzzer:
             #pass
 
     def waf_detect(self):
-        resp = urllib2.urlopen(self.url+"' and 1=1")
-        waf_resp =  ''.join(resp.read())
+        print "[+]Start waf_detect...\n"
+        try:
+            resp = urllib2.urlopen(self.url+"' and 1=1")
+        except Exception,e:
+            print e
+            return
+        #detect_url = self.url+"' and 1=1"
+
+        #opener = urllib2.build_opener()
+        #opener.addheaders.append(('Cookie', self.cookie))
+        #resp = opener.open(detect_url).read()
+
+        waf_resp =  ''.join(resp)
         X_Safe_Firewall = waf_resp.info().getheader('X-Safe-Firewall')
         Set_Cookie =  waf_resp.info().getheader('Set-Cookie')
         X_Powered_By_360WZB = waf_resp.info().getheader('X-Safe-Firewall')
@@ -66,7 +79,7 @@ class fuzzer:
             print "[x]Maybe D safe here."
         elif '360' in  X_Powered_By_360WZB:
             print "[x]Maybe 360 Wangzhan Safe here."
-        elif 'jiasule' in in waf_resp:
+        elif 'jiasule' in  waf_resp:
             print "[x]Maybe Jiasule Safe here."
         elif  'yunsuo' in waf_resp:
             print "[x]Maybe YunSuo safe here."
@@ -88,6 +101,7 @@ class fuzzer:
         f.close()
         
     def xss_detect(self, params):
+        print "[+]Start xss_detect...\n"
 
         for key in params:    
             if self.keyword != "":
@@ -110,6 +124,7 @@ class fuzzer:
         return "Error"
     
     def file_read_detect(self):
+        print "[+]Start file_read_detect...\n"
         if self.keyword != "":
             return "Error"
         else:
@@ -121,6 +136,7 @@ class fuzzer:
         else:
             pass
     def url_redirect_detect(self):
+        print "[+]Start url_redirect_detect...\n"
         if self.keyword != "":
             return "Error"
         else:
@@ -135,6 +151,7 @@ class fuzzer:
     #暂时放弃，没有特别好的判断方法，误报率可能会较高。
     #貌似有新的解决办法
     def file_download_detect(self):
+        print "[+]Start file_download_detect...\n"
         if self.keyword != "":
             return "Error"
         else:
@@ -151,7 +168,12 @@ class fuzzer:
 
                 try:
                     detect_url = self.url.replace(value,vector_value)
-                    content_type = urllib2.urlopen(detect_url)
+                    #content_type = urllib2.urlopen(detect_url)
+
+                    opener = urllib2.build_opener()
+                    opener.addheaders.append(('Cookie', self.cookie))
+                    content_type = opener.open(detect_url)
+
                     content_type_string = content_type.info().getheader('content-type')
                     match = re.search('octet-stream',''.join(content_type_string))
                     if match:
@@ -168,12 +190,16 @@ class fuzzer:
     #坑爹的是，这里抓到的set-cookie好像内容很少，乌云和百度都没抓到，感觉有点鸡肋了。
     #这里只有复制第三方cookie，通过输入框传播。此处通过content-length大小来比较。
     def pass_by_detect(self):
+        print "[+]Start pass_by_detect...\n"
         response = urllib2.urlopen(self.url).read()
         lengh = len(response)
         
         req = urllib2.Request(self.url)
-        req.add_header('Cookie', self.keyword)
+        #req.add_header('Cookie', self.keyword)
+        req.add_header('Cookie', self.cookie)
+
         cookie_response = urllib2.urlopen(req).read()
+
         cookie_lengh = len(cookie_response)
         print "cookie_lengh:"+str(cookie_lengh)+"\n"
         print "lengh:"+str(lengh)+"\n"
@@ -193,7 +219,11 @@ class fuzzer:
             #print value
             detect_url = self.url.replace(value,vector_value)
             try:
-                resp = urllib2.urlopen(detect_url).read()
+                #resp = urllib2.urlopen(detect_url).read()
+                opener = urllib2.build_opener()
+                opener.addheaders.append(('Cookie', self.cookie))
+                resp = opener.open(detect_url).read()
+
                 #match = re.search(r"\n.*628.*\n",resp)
                 for keyword in keyword_list:
                     #match = re.search(r"prompt\(628",''.join(resp))
@@ -210,7 +240,7 @@ class fuzzer:
 
             
 if __name__ == "__main__":
-    url = "http://www.tvsou.com/column/index.asp?id=yuQ17S"
+    exp_url = "http://www.tvsou.com/column/index.asp?id=yuQ17S"
     #keyword = "id"
     #fuzzer = fuzzer(url,keyword)
     #fuzzer = fuzzer(url)
