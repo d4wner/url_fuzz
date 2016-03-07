@@ -27,9 +27,10 @@ Main functions:
 1.add waf detect
 
 #upadte 2016.03.07
-1.ready to use
-2.server.py as background runing...
-3.pentest_api.py as burp_extender
+1.ready to use demo.
+2.pyweb/server.py as background runing...
+3.pyburp/pentest_api.py as burp_extender..
+4.pyweb/log.txt will log what you successed...
 4.you can check:
 ---------------
 -xss_detect
