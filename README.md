@@ -26,3 +26,16 @@ Main functions:
 #update 2016.01.23
 1.add waf detect
 
+#upadte 2016.03.07
+1.ready to use
+2.server.py as background runing...
+3.pentest_api.py as burp_extender
+4.you can check:
+---------------
+xss_detect
+url_redirect
+file_download
+file_read
+pass_by(Unauthorized attack)
+---------------
+5.Dears,please feedback for me...
