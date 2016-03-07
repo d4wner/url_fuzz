@@ -32,10 +32,10 @@ Main functions:
 3.pentest_api.py as burp_extender
 4.you can check:
 ---------------
-xss_detect
-url_redirect
-file_download
-file_read
-pass_by(Unauthorized attack)
+-xss_detect
+-url_redirect
+-file_download
+-file_read
+-pass_by(Unauthorized attack)
 ---------------
 5.Dears,please feedback for me...
